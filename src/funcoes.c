@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -7,11 +8,9 @@
 
 
 
-//a funcao de Divisao vai passar caracter por caracter de uma string e verificar se o digito nao eh null terminator,
-//e enquanto nao for, vai verificar se o caracter eh diferente do divisor de linhas (-)
-//enquanto nao for divisor de linhas, vai para a funcao de Condicional, que faz as verificacoes para transcrever a
-//notacao forsyth para uma matriz
-//a funcao sempre ajusta os indices i(linha) e j(coluna) para preencher a matriz corretamente
+//a funcao de Divisao vai passar caracter por caracter de uma string e verificar se o digito nao eh null terminator.
+//tambem vai verificar se o caracter atual eh o divisor de linha (-), e enquanto nao for, vai entrar dentro da funcao
+//de Condicional. se ele for o divisor de linhas, vai passar para a proxima linha e resetar o contador de colunas
 void DivisaoStringForsyth(char entrada[100], char matriz[8][8]) {
     int i = 0, j = 0, contador = 0;
     for (contador = 0; entrada[contador] != '\0'; contador++) {
@@ -26,9 +25,11 @@ void DivisaoStringForsyth(char entrada[100], char matriz[8][8]) {
 }
 
 
+
 //a funcao de Condicional verifica se o caracter eh um numero ou uma letra. se for uma letra, ele a salva na posicao
 //atual da matriz e passa pra proxima coluna. se for um digito, ele primeiramente converte o char em um int e depois
-//entra em um loop colocando um valor "nulo" nas colunas vazias correspondentes
+//entra em um loop colocando um valor "nulo" nas colunas vazias correspondentes. o j tem que ser ponteiro pq ele tem que
+//alterar a variavel original, o que nao aconteceria se ele nao fosse ponteiro
 void Condicionais(char entrada[100], char matriz[8][8], int i, int *j, int contador) {
     if (!isdigit(entrada[contador])) {
         matriz[i][*j] = entrada[contador];
@@ -44,6 +45,9 @@ void Condicionais(char entrada[100], char matriz[8][8], int i, int *j, int conta
     }
 }
 
+
+
+//print simples em todos os elementos da matriz
 void PrintMatriz(char matriz[8][8]){
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -51,4 +55,29 @@ void PrintMatriz(char matriz[8][8]){
         }
         printf("\n");
     }
+}
+
+
+
+//funcao que percorre a matriz e devolve as posicoees i e j do rei
+void AcharRei(char matriz[8][8], int PosicaoRei[2]){
+    int i, j;
+    for (i = 0; i < 8; i++){
+        for(j = 0; j < 8; j++){
+            if (matriz[i][j] == 'R'){
+                PosicaoRei[0] = i, PosicaoRei[1] = j;
+                return;
+            }
+        }
+    }
+}
+
+
+
+bool AtaquePeao(char matriz[8][8], int PosicaoRei[2]){
+    int i = PosicaoRei[0], j = PosicaoRei[1];
+    if (matriz[i-1][j-1] == 'p' || matriz[i-1][j+1] == 'p'){
+        return true;
+    }
+    return false;
 }
