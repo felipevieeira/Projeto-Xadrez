@@ -74,10 +74,17 @@ void AcharRei(char matriz[8][8], int PosicaoRei[2]){
 
 
 
+//verifica se i>0, pq o rei na linha 0 nunca pode tomar xeque pra um peao. ele faz as duas verificacoes separadamente
+//pra nao dar out of bounds (acessar o indice da esquerda quando j=0 ou o indice da direita quando j=7)
 bool AtaquePeao(char matriz[8][8], int PosicaoRei[2]){
     int i = PosicaoRei[0], j = PosicaoRei[1];
-    if (matriz[i-1][j-1] == 'p' || matriz[i-1][j+1] == 'p'){
-        return true;
+    if (i > 0){
+        if (j > 0 && matriz[i-1][j-1] == 'p'){
+            return true;
+        }
+        if (j < 7 && matriz[i-1][j+1] == 'p') {
+            return true;
+        }
     }
     return false;
 }
